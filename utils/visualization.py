@@ -22,8 +22,8 @@ def read_measurements(filepath):
     with open(filepath) as f:
         measurements = yaml.safe_load(f)
 
-    if len(measurements) == 0:
-        print("[bold red]Measurements file is empty.[/bold][red]")
+    if measurements == None or len(measurements) == 0:
+        print("[bold red]Measurements file is empty.[/bold red]")
         exit()
     elif len(measurements) == 1:
         print("[bold red]Can't visualize single measurement.[/bold red]")

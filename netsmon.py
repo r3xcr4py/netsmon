@@ -62,6 +62,10 @@ def list_measurements():
     with open(MEASUREMENTS_FILE) as f:
         data = yaml.safe_load(f)
 
+    if data == None or len(data) == 0:
+        print("[bold red]Measurements file is empty.[/bold red]")
+        exit()
+
     table = Table(show_header=True, header_style="bold",
                   title="Measurements", show_edge=True, show_lines=True,
                   row_styles=["green", "dim green"])
