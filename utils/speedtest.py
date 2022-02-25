@@ -137,11 +137,11 @@ def run_standard_test(measurement_sizes: list = None, measurement_percentile: in
     upload_speed	= percentile(UPLOAD_MEASUREMENTS, measurement_percentile)
 
     return {
-		"download_measurements" : DOWNLOAD_MEASUREMENTS,
-		"upload_measurements"	: UPLOAD_MEASUREMENTS,
-		"latency_measurements"	: LATENCY_MEASUREMENTS,
-		'download_speed'		: download_speed,
-		'upload_speed'			: upload_speed,
+        "download_measurements" : DOWNLOAD_MEASUREMENTS,
+        "upload_measurements"	: UPLOAD_MEASUREMENTS,
+        "latency_measurements"	: LATENCY_MEASUREMENTS,
+        'download_speed'		: download_speed,
+        'upload_speed'			: upload_speed,
         'latency'               : latency,
         'jitter'                : jitter
 	}
