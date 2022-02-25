@@ -46,6 +46,8 @@ def save_measurement_data(data):
     if os.path.exists(MEASUREMENTS_FILE):
         with open(MEASUREMENTS_FILE) as f:
             old_data = yaml.safe_load(f)
+            old_data = old_data if old_data != None else []
+            
         old_data.append(data)
 
         with open(MEASUREMENTS_FILE, 'w') as f:
