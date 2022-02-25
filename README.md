@@ -13,3 +13,13 @@ python3 netsmon.py
 ```
 python3 netsmon.py --visualize
 ```
+
+## Examples
+### Measure internet speed
+![measure internet speed](./examples/example-1.png)
+### List all measurements
+![list all measurements](./examples/example-2.png)
+### Visualize internet speed
+![visualize internet speed](./examples/example-3.png)
+### Visualize network latency
+![visualize latency](./examples/example-4.png)
