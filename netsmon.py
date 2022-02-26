@@ -7,12 +7,14 @@ from datetime import datetime
 
 import requests
 import yaml
+from bokeh.server.server import Server
 from rich import print
 from rich.console import Console
 from rich.table import Table
 
 from utils import speedtest
-from utils.visualization import visualize_measurements
+from utils.visualization import (measurements_virtualization_app,
+                                 set_app_theme, set_measurements)
 
 CF_METADATA_URL = "https://speed.cloudflare.com/meta"
 
@@ -38,6 +40,19 @@ def get_internet_information():
 
     return info
 
+def read_measurements(filepath = MEASUREMENTS_FILE):
+    if not os.path.exists(filepath):
+        print("[bold red]Measurements file not found.[/bold red]")
+        exit(1)
+
+    with open(filepath) as f:
+        measurements = yaml.safe_load(f)
+
+    if measurements == None or len(measurements) == 0:
+        print("[bold red]Measurements file is empty.[/bold red]")
+        exit()
+
+    return measurements
 
 def save_measurement_data(data):
     if not os.path.exists(OUTPUT_DIR):
@@ -57,16 +72,7 @@ def save_measurement_data(data):
             yaml.safe_dump([data], f, allow_unicode=True)
 
 def list_measurements():
-    if not os.path.exists(MEASUREMENTS_FILE):
-        print("[bold red]No measurements found![/bold red]")
-        exit()
-
-    with open(MEASUREMENTS_FILE) as f:
-        data = yaml.safe_load(f)
-
-    if data == None or len(data) == 0:
-        print("[bold red]Measurements file is empty.[/bold red]")
-        exit()
+    data = read_measurements()
 
     table = Table(show_header=True, header_style="bold",
                   title="Measurements", show_edge=True, show_lines=True,
@@ -161,7 +167,24 @@ def main():
     if args.list_measurements:
         list_measurements()
     elif args.visualize:
-        visualize_measurements(MEASUREMENTS_FILE, theme=args.theme)
+        if args.theme:
+            set_app_theme(args.theme)
+
+        measurements = read_measurements()
+
+        if len(measurements) == 1:
+            print("[bold red]Can't visualize single measurement.[/bold red]")
+            exit()
+
+        set_measurements(measurements)
+
+        server = Server(applications={'/': measurements_virtualization_app})
+        server.start()
+
+        print('Opening application on http://localhost:5006/')
+
+        server.io_loop.add_callback(server.show, "/")
+        server.io_loop.start()
     else:
         new_measurement()
 
